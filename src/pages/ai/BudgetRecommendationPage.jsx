@@ -5,7 +5,9 @@ import { useAppContext } from '../../context/AppContext'
 import { formatCurrency } from '../../utils/formatters'
 
 export default function BudgetRecommendationPage() {
-  const { totals } = useAppContext()
+  const { totals, transactions, recurringExpenses, goals } = useAppContext()
+  const isNewUser = transactions.length === 0 && recurringExpenses.length === 0 && goals.length === 0
+
   const operating = totals.earningsTotal * 0.4
   const savings = totals.earningsTotal * 0.35
   const personal = totals.earningsTotal * 0.25
@@ -25,18 +27,18 @@ export default function BudgetRecommendationPage() {
         </div>
         <div className="stack-list">
           <ProgressBar
-            value={40}
+            value={isNewUser ? 0 : 40}
             label={`Operating costs • ${formatCurrency(operating)}`}
             helper="Fuel, maintenance, subscriptions, insurance, and tools."
           />
           <ProgressBar
-            value={35}
+            value={isNewUser ? 0 : 35}
             label={`Savings and reserves • ${formatCurrency(savings)}`}
             helper="Emergency fund, taxes, and bigger goals."
             color="linear-gradient(90deg, var(--accent-green), var(--accent-blue))"
           />
           <ProgressBar
-            value={25}
+            value={isNewUser ? 0 : 25}
             label={`Personal spending • ${formatCurrency(personal)}`}
             helper="Lifestyle spending after the essentials are protected."
           />
